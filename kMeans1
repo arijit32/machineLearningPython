@@ -1,0 +1,37 @@
+# Code demonstrates the use of K-Means clustering using Scikit
+# For putting together this code, I have visited various websites and looked at other people's work
+# I have also studied various packages documentation
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+import numpy as np
+
+# sample data set for SVM based classification
+from sklearn.datasets import make_blobs
+
+# create sample data with 4 clusters
+XYData = make_blobs(n_samples=200, n_features=2, centers=4, cluster_std=1.8, random_state=101)
+plt.scatter(XYData[0][:, 0], XYData[0][:, 1])
+plt.show(0)
+
+plt.scatter(XYData[0][:, 0], XYData[0][:, 1], c=XYData[1], cmap='rainbow')
+
+from sklearn.cluster import KMeans
+
+XNoOfClusters = np.arange(2, 6)
+YKMeansDistortion = np.zeros(4)
+
+for i in range(2, 6):
+    kMeans = KMeans(n_clusters = i)
+    kMeans.fit(XYData[0])
+    print(kMeans.cluster_centers_)
+    print(kMeans.labels_)
+    plt.scatter(XYData[0][:, 0], XYData[0][:, 1], c=kMeans.labels_, cmap='rainbow')
+    YKMeansDistortion[i - 2] = kMeans.inertia_
+
+plt.clf()
+'''use elbow method to find out number of clusters
+this method often does not offer clarity and
+downstream objectives may need to be considered'''
+plt.plot(XNoOfClusters, YKMeansDistortion)

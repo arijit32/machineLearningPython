@@ -1,0 +1,39 @@
+# Code demonstrates how to perform Principal Component Analysis (PCA) using Scikit
+# For putting together this code, I have visited various websites and looked at other people's work
+# I have also studied various packages documentation
+
+import pandas as pd
+import numpy as np
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.datasets import load_breast_cancer
+from sklearn import preprocessing
+bCancer = load_breast_cancer()
+print(type(bCancer))
+print(bCancer.keys())
+print(bCancer['DESCR'])
+bCancerDF = pd.DataFrame(preprocessing.scale(bCancer['data']), columns=bCancer['feature_names'])
+print(bCancerDF.head())
+
+from sklearn.decomposition import PCA
+pCA = PCA() # n_components not mentioned in function call as explained_variance_ratio_.cumsum array can be used in the future
+# for selecting a threshold for % variance retained from the original data
+# in this case we are just selecting the first 2 principal components for visualization
+XPCA = pCA.fit_transform(bCancerDF)
+# the explained_variance_ratio_.cumsum array below returns the cumulative variance for the principal components
+# the returned array below location i mentions the % variance retained by i + 1 principal components
+print(pCA.explained_variance_ratio_.cumsum())
+
+# Select first 2 components for visualization
+plt.scatter(XPCA[:,0], XPCA[:,1], c=bCancer['target'], cmap='plasma')
+plt.xlabel('Component 1')
+plt.ylabel('Component 2')
+plt.show(0)
+
+plt.clf()
+# the code below generates a heatmap of how individual columns in the original data are affecting the first 2 principal components
+# not of much use in this dataset but could be of use in another type
+# e.g. economic data of countries where some columns are per capita based and the others are gross based
+sns.heatmap(pd.DataFrame(pCA.components_[0:2], columns=bCancer['feature_names']), cmap='plasma')

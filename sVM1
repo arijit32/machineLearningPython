@@ -1,0 +1,38 @@
+# Code demonstrates how to perform SVM RBF kernel based classification using Scikit
+
+import pandas as pd
+
+import numpy as np
+
+# sample data set for SVM based classification
+from sklearn.datasets import load_breast_cancer
+
+bCancerDataSet = load_breast_cancer()
+print(bCancerDataSet.keys())
+print(bCancerDataSet['DESCR'])
+
+from sklearn.model_selection import train_test_split
+from sklearn import preprocessing
+
+# Data has been scaled and normalized for a better SVM fit
+XTrain, X1, YTrain, Y1 = train_test_split(pd.DataFrame(preprocessing.scale(bCancerDataSet['data']), columns = bCancerDataSet['feature_names']), bCancerDataSet['target'], test_size = 0.4, random_state = 101)
+# further splits below of the data set for future comparison with other factors and model types
+XCV, XTest = X1.head(int(X1.shape[0] / 2)), X1.tail(int(X1.shape[0] / 2))
+YCV, YTest = np.split(Y1,2)
+
+from sklearn.svm import SVC
+classificationModel = SVC()
+classificationModel.fit(XTrain, YTrain)
+predictions = classificationModel.predict(XTest)
+
+from sklearn.metrics import classification_report, confusion_matrix
+print(confusion_matrix(YTest, predictions), '\n', classification_report(YTest, predictions))
+
+from sklearn.model_selection import GridSearchCV
+# Various C and sigma values to improve model results
+svmCSigmaParameters = {'C':[0.1, 1, 10, 100, 1000], 'gamma':[1, 0.1, 0.01, 0.001, 0.0001]}
+resultGrid = GridSearchCV(SVC(), svmCSigmaParameters, verbose = 4)
+resultGrid.fit(XTrain, YTrain)
+print(resultGrid.best_params_)
+gridPredictions = resultGrid.predict(XTest)
+print(confusion_matrix(YTest, gridPredictions), '\n', classification_report(YTest, gridPredictions))

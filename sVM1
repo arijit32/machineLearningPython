@@ -15,7 +15,7 @@ from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
 
 # Data has been scaled and normalized for a better SVM fit
-XTrain, X1, YTrain, Y1 = train_test_split(pd.DataFrame(preprocessing.scale(bCancerDataSet['data']), columns = bCancerDataSet['feature_names']), bCancerDataSet['target'], test_size = 0.4, random_state = 101)
+XTrain, X1, YTrain, Y1 = train_test_split(pd.DataFrame(preprocessing.scale(bCancerDataSet['data']), columns = bCancerDataSet['feature_names']), bCancerDataSet['target'], test_size = 0.4)
 # further splits below of the data set for future comparison with other factors and model types
 XCV, XTest = X1.head(int(X1.shape[0] / 2)), X1.tail(int(X1.shape[0] / 2))
 YCV, YTest = np.split(Y1,2)

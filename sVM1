@@ -30,7 +30,7 @@ print(confusion_matrix(YTest, predictions), '\n', classification_report(YTest, p
 
 from sklearn.model_selection import GridSearchCV
 # Various C and sigma values to improve model results
-svmCSigmaParameters = {'C':[0.1, 1, 10, 100, 1000], 'gamma':[1, 0.1, 0.01, 0.001, 0.0001]}
+svmCSigmaParameters = {'C':[0.01, 0.1, 1, 10, 100, 1000], 'gamma':[1, 0.1, 0.01, 0.001, 0.0001]}
 resultGrid = GridSearchCV(SVC(), svmCSigmaParameters, verbose = 4)
 resultGrid.fit(XTrain, YTrain)
 print(resultGrid.best_params_)

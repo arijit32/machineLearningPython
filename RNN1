@@ -27,7 +27,7 @@ def sentences_to_indices(X, word_to_index, max_len):
     
     ### START CODE HERE ###
     # Initialize X_indices as a numpy matrix of zeros and the correct shape (≈ 1 line)
-    X_indices = np.zeros((m, max_len))
+    X_indices = np.zeros((m, max_len)) 
     
     for i in range(m):                               # loop over training examples
         
